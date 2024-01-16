@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Promise</title>
+    </head>
+    <body>
+        <script>
+            "use strict";
+
+            /**
+             * Promise
+             * runs executor automatically and attempts to perform a job. When it is
+               finished with the attempt, it calls 'resolve' if it was successful or
+               'reject' if there was an error to change the state of the promise object.
+             */
+            {
+                let promise = new Promise(function (resolve, reject) {
+                    // after a long time...
+                    resolve("done"); // or reject(new Error('...'))
+                });
+            }
+
+            // Consumers: then and catch
+            // then
+            {
+                let promise = new Promise(function (resolve, reject) {
+                    setTimeout(() => resolve("done!"), 1000);
+                });
+
+                // resolve runs the first function
+                promise.then(
+                    (result) => alert(result), // done!
+                    (error) => alert(error)
+                );
+            }
+            {
+                let promise = new Promise(function (resolve, reject) {
+                    setTimeout(() => reject(new Error("Whoops!")), 1500);
+                });
+
+                // reject runs the second function
+                promise.then(
+                    (result) => alert(result),
+                    (error) => alert(error) // Error: Whoops!
+                );
+            }
+            {
+                let promise = new Promise((resolve) => {
+                    setTimeout(() => resolve("done!"), 2000);
+                });
+
+                // when interested only in successful completions
+                promise.then(alert); // done!
+            }
+
+            // catch: interested only in errors
+            {
+                let promise = new Promise((resolve, reject) => {
+                    setTimeout(() => reject(new Error("Whoops!")), 2500);
+                });
+
+                promise.catch(alert); // Error: Whoops!
+            }
+
+            // Cleanup: finally
+            // passes through the result or error to the next suitable handler
+            {
+                new Promise((resolve, reject) => {
+                    setTimeout(() => resolve("done!"), 3000);
+                })
+                    .finally(() => alert("Promise ready")) // triggers first
+                    .then((result) => alert(result)); // done!
+
+                new Promise((resolve, reject) => {
+                    setTimeout(() => reject(new Error("Whoops!"), 3500));
+                })
+                    .finally(() => alert("Promise ready")) // triggers first
+                    .catch((error) => alert(error)); // Error: Whoops!
+            }
+
+            // Example: loadScript
+            {
+                function loadScript(src) {
+                    return new Promise(function (resolve, reject) {
+                        let script = document.createElement("script");
+                        script.src = src;
+
+                        script.onload = () => resolve(script);
+                        script.onerror = () =>
+                            reject(new Error(`Script load error for ${src}`));
+
+                        document.head.append(script);
+                    });
+                }
+
+                let promise = loadScript(
+                    "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js"
+                );
+
+                promise.then(
+                    (script) => alert(`${script.src} is loaded!`),
+                    (error) => alert(`Error: ${error.message}`)
+                );
+
+                promise.then((script) => alert("Another handler..."));
+            }
+        </script>
+    </body>
+</html>

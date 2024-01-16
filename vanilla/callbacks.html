@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Introduction: callbacks</title>
+    </head>
+    <body>
+        <script>
+            "use strict";
+
+            /**
+             * A function that does something asynchronously should provide a callback argument
+               where we put the function to run after it's complete
+             */
+            {
+                function loadScript(src, callback) {
+                    // creates a <script> tag and append it to the page
+                    // this causes the script with given src to start loading and run when complete
+                    let script = document.createElement("script");
+                    script.src = src;
+
+                    // executes a function after the script is loaded and executed
+                    script.onload = () => callback(script);
+
+                    document.head.append(script);
+                }
+
+                // load and execute the script at the given path
+                loadScript(
+                    "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js",
+                    (script) => {
+                        alert(`Cool, the script ${script.src} is loaded`);
+
+                        // way to load scripts sequentially
+                        loadScript(
+                            "https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.2.0/lodash.js",
+                            function (script) {
+                                alert(`Cool, the second script is loaded`);
+                            }
+                        );
+                    }
+                );
+            }
+
+            // Handling errors
+            {
+                function loadScript(src, callback) {
+                    let script = document.createElement("script");
+                    script.src = src;
+
+                    script.onload = () => callback(null, script);
+                    script.onerror = () =>
+                        callback(new Error(`Script load error for ${src}`));
+
+                    document.head.append(script);
+                }
+
+                loadScript("my/script.js", function (error, script) {
+                    if (error) {
+                        alert("ERROR! Script not found!");
+                    } else {
+                        alert("Script found!");
+                    }
+                });
+            }
+        </script>
+    </body>
+</html>
