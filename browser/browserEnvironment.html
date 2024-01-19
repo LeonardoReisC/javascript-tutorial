@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Browser Environment</title>
+    </head>
+    <body>
+        <script>
+            /**
+             * Document Object Model(DOM)
+             * represents all page content as objects that can be modified
+            
+             * https://dom.spec.whatwg.org
+             * */
+            {
+                // change background color to red
+                document.body.style.background = "red";
+
+                // change it back after 1 second
+                setTimeout(() => (document.body.style.background = ""), 1000);
+            }
+
+            /**
+             * Browser Object Model
+             * represents additional objects provided by the browser
+             * */
+            {
+                alert(navigator.userAgent); // Mozilla/5.0...
+                alert(navigator.platform); // Win32
+                alert(location.href); // http://127.0.0.1:5500/browser/document.html
+            }
+        </script>
+    </body>
+</html>

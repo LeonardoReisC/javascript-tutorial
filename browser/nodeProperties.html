@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Node properties: type, tag and contents</title>
+    </head>
+    <body>
+        <script>
+            // The 'nodeType' property
+            {
+                let elem = document.body;
+
+                alert(elem.nodeType); // 1 => element
+                alert(elem.firstChild.nodeType); // 3 => text
+                alert(document.nodeType); // 9 => document object
+            }
+
+            // Tag: nodeName and tagName
+            {
+                alert(document.tagName); // undefined, works only for elements
+                alert(document.nodeName); // #document
+
+                alert(document.body.firstChild.tagName); // undefined
+                alert(document.body.firstChild.nodeName); // #text
+            }
+        </script>
+
+        <p>A paragraph</p>
+        <div>A div</div>
+        <script>
+            // innerHTML: the contents
+            {
+                alert(document.body.innerHTML);
+
+                // if scripts are add, they will not be executed
+                document.body.innerHTML = "<b>HACKED</b>";
+            }
+        </script>
+
+        <div>Hello, world!</div>
+        <script>
+            // outerHTML: full HTML of the element
+            {
+                let div = document.querySelector("div");
+
+                alert(div.outerHTML); // <div>Hello, world!</div>
+
+                // replace div.outerHTML with <p>...</p>
+                div.outerHTML = "<p>A new element</p>";
+
+                // old value is still in 'div' varialbe
+                alert(div.outerHTML); // <div>Hello, world!</div>
+            }
+        </script>
+
+        <div id="div">
+            Hi
+            <!-- intern div -->
+            <div></div>
+        </div>
+        <script>
+            // nodeValue/data: text node content
+            {
+                let text = div.firstChild;
+                alert(text.data); // Hi
+
+                let comment = text.nextSibling;
+                alert(comment.data); // intern div
+            }
+        </script>
+
+        <div id="news">
+            <h1>Headline!</h1>
+            <p>Martians attack people!</p>
+        </div>
+        <script>
+            // textContent: get the text inside the element minus all <tags>
+            {
+                alert(news.textContent); // Headline! Martians attack people!
+            }
+        </script>
+
+        <div id="elem1"></div>
+        <div id="elem2"></div>
+        <script>
+            // textContent treats data 'as text'
+            {
+                let name = prompt("What's your name", "<b>Leonardo</b>");
+
+                elem1.innerHTML = name;
+                elem2.textContent = name;
+            }
+        </script>
+
+        <div id="elem">A blinking element</div>
+        <script>
+            // The 'hidden' property: specifies is the element is visible or not
+            {
+                setTimeout(() => (elem.hidden = !elem.hidden), 2000);
+            }
+        </script>
+    </body>
+</html>

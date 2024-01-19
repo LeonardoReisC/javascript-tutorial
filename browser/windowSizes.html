@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Window sizes and scrolling</title>
+    </head>
+    <body>
+        <script>
+            // Width/height of the window
+            {
+                alert(document.documentElement.clientWidth); // 1495
+                alert(document.documentElement.clientHeight); // 794
+            }
+
+            // Width/height of the document
+            {
+                let scrollHeight = Math.max(
+                    document.body.scrollHeight,
+                    document.documentElement.scrollHeight,
+                    document.body.offsetHeight,
+                    document.documentElement.offsetHeight,
+                    document.body.clientHeight,
+                    document.documentElement.clientHeight
+                );
+
+                alert(
+                    `Full document height, with scrolled out part: ${scrollHeight}`
+                ); // Full document height, with scrolled out part: 794
+            }
+
+            // Get the current scroll
+            {
+                alert(`Current scroll from the top: ${window.pageYOffset}`); // 0
+                alert(`Current scroll from the left: ${window.pageXOffset}`); // 0
+            }
+        </script>
+    </body>
+</html>

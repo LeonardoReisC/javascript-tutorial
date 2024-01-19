@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Styles and classes</title>
+    </head>
+    <body class="main page">
+        <script>
+            // className
+            {
+                alert(document.body.className); // main page
+            }
+
+            // classList: used to operate on individual classes
+            {
+                document.body.classList.add("home"); // add a class
+
+                document.body.classList.toggle("container"); // if exists remove, else add
+                document.body.classList.remove(...["home", "container"]);
+
+                for (let className of document.body.classList) {
+                    alert(className); // main, then page
+                }
+            }
+
+            // Element style: object that corresponds to "style" attribute
+            {
+                document.body.style.backgroundColor = "lightgray";
+
+                setTimeout(
+                    () =>
+                        document.body.style.removeProperty("background-color"),
+                    1000
+                ); // same as document.body.style.backgroundColor = ""
+            }
+        </script>
+
+        <style>
+            .computed {
+                color: red;
+                margin: 1em;
+            }
+        </style>
+        <div id="computed" class="computed">Computed styles</div>
+        <script>
+            // Computed styles: getComputedStyle
+            {
+                let computedStyle = getComputedStyle(computed);
+
+                alert(computedStyle.marginTop); // 16px, resolved values
+                alert(computedStyle.color); // rgb(255, 0, 0)
+            }
+        </script>
+    </body>
+</html>

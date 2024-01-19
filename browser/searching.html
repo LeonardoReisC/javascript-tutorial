@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Search: getElement*, querySelector*</title>
+    </head>
+    <body>
+        <div id="elem">
+            <div id="elem-content">Element</div>
+        </div>
+        <script>
+            // getElementById
+            {
+                let elem = document.getElementById("elem");
+                elem.style.background = "red";
+            }
+
+            // or just id
+            {
+                alert(elem); // [object HTMLDivElement]
+            }
+        </script>
+
+        <ul>
+            <li>1st</li>
+            <li>Leonardo</li>
+        </ul>
+        <ul>
+            <li>2nd</li>
+            <li>Reis</li>
+        </ul>
+        <script>
+            /**
+             * elem.querySelectorAll(css)
+             * returns all elements inside elem matching the given CSS selector
+             * */
+            {
+                let elements = document.querySelectorAll("ul > li:last-child");
+
+                for (let elem of elements) {
+                    alert(elem.innerHTML); // Leonardo, then Reis
+                }
+            }
+
+            // elem.querySelector(css): return the first matching
+            {
+                // same as elem.querySelectorAll(css)[0]
+                let elem = document.querySelector("ul > li:last-child");
+
+                alert(elem.innerHTML);
+            }
+        </script>
+
+        <a href="http://example.com/file.zip">...</a>
+        <script>
+            // matches: checks if elem matches the CSS selector
+            for (let elem of document.body.children) {
+                if (elem.matches("a[href$='zip']")) {
+                    alert(`The archive reference: ${elem.href}`);
+                }
+            }
+        </script>
+
+        <h1>Contents</h1>
+
+        <div class="contents">
+            <ul class="book">
+                <li class="chapter">Chapter 1</li>
+                <li class="chapter">Chapter 2</li>
+            </ul>
+        </div>
+        <script>
+            /**
+             * closest
+             * returns the first ancestor that matches the given CSS selector
+             * */
+            {
+                let chapter = document.querySelector(".chapter");
+
+                alert(chapter.closest(".book").nodeName); // UL
+                alert(chapter.closest(".contents").nodeName); // DIV
+
+                alert(chapter.closest("h1")); // null, h1 is not an ancestor
+            }
+        </script>
+
+        <table id="table">
+            <tr>
+                <td>Your age:</td>
+
+                <td>
+                    <label>
+                        <input type="radio" name="age" value="young" checked />
+                        less than 18
+                    </label>
+                    <label>
+                        <input type="radio" name="age" value="mature" /> from 18
+                        to 50
+                    </label>
+                    <label>
+                        <input type="radio" name="age" value="senior" /> more
+                        than 60
+                    </label>
+                </td>
+            </tr>
+        </table>
+
+        <form name="my-form">
+            <div class="article">Article</div>
+            <div class="long article">Long article</div>
+        </form>
+        <script>
+            // getElementsBy*
+            {
+                // find by tag name
+                let inputs = table.getElementsByTagName("input");
+
+                for (let input of inputs) {
+                    alert(`${input.value}: ${input.checked}`);
+                }
+            }
+            {
+                // find by name attribute
+                let form = document.getElementsByName("my-form")[0];
+
+                // find by class inside the form
+                let articles = form.getElementsByClassName("article");
+                alert(articles.length); // 2
+            }
+        </script>
+    </body>
+</html>

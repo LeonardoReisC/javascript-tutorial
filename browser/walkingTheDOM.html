@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Walking the DOM</title>
+    </head>
+    <body>
+        <div>Begin</div>
+
+        <ul>
+            <li>
+                <b>Information</b>
+            </li>
+        </ul>
+
+        <div>End</div>
+        <script>
+            /**
+             * On top
+             * document.documentElement: DOM node of <html> tag.
+             * document.head: DOM node of <head> tag.
+             * document.body: DOM node of <body> tag .
+             * */
+            {
+                alert(document.documentElement); // [object HTMLHtmlElement]
+                alert(document.head); // [object HTMLHeadElement]
+                alert(document.body); // [object HTMLBodyElement]
+            }
+
+            /**
+             * Children
+             * Child nodes: direct children elements.
+             * Descendants: all elements nested.
+             * */
+            {
+                let childs = [];
+                for (let i = 0; i < document.body.childNodes.length; i++) {
+                    childs.push(document.body.childNodes[i].nodeName);
+                }
+                alert(childs); // #text,DIV,#text,UL,#text,DIV,#text,SCRIPT
+                alert(document.body.firstChild.nodeName); // #text
+                alert(document.body.lastChild.nodeName); // SCRIPT
+            }
+
+            // Siblings: are nodes that are children of the same parent
+            {
+                alert(document.body.parentNode === document.documentElement); // true
+
+                // there's a #text node after/before in this case
+                alert(document.head.nextSibling.nextSibling); // [object HTMLBodyElement]
+                alert(document.body.previousSibling.previousSibling); // // [object HTMLHeadElement]
+            }
+
+            // Element-only navigation: avoids non-elements node(text, comments...)
+            {
+                let childs = [];
+                for (let i = 0; i < document.body.children.length; i++) {
+                    childs.push(document.body.children[i].nodeName);
+                }
+                alert(childs); // DIV,UL,DIV,SCRIPT
+                alert(document.body.firstElementChild.nodeName); // DIV
+                alert(document.body.lastElementChild.nodeName); // SCRIPT
+
+                alert(document.body.parentElement); // [object HTMLHtmlElement]
+                alert(document.head.nextElementSibling); // [object HTMLBodyElement]
+                alert(document.body.previousElementSibling); // [object HTMLHeadElement]
+            }
+        </script>
+    </body>
+</html>

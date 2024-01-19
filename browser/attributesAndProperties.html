@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Attributes and Properties</title>
+    </head>
+    <body>
+        <div id="elem" about="Dog"></div>
+        <script>
+            // HTML attributes: only stantard attributes are parsed to DOM properties
+            {
+                alert(elem.id); // elem
+                alert(elem.about); // undefined, non-standard attribute
+            }
+
+            // can be accessed in another way
+            {
+                alert(elem.getAttribute("about")); // Dog
+
+                elem.setAttribute("nick", "Nala");
+
+                alert(elem.outerHTML); // <div id="elem" about="Dog" nick="Nala"></div>
+
+                for (let attr of elem.attributes) {
+                    alert(`${attr.name} = ${attr.value}`);
+                }
+            }
+        </script>
+
+        <input />
+        <script>
+            // Property-attribute synchronization
+            {
+                let input = document.querySelector("input");
+
+                // attribute => property
+                input.setAttribute("id", "id");
+                alert(input.id); // id (updated)
+
+                // property => attribute
+                input.id = "newId";
+                alert(input.getAttribute("id")); // newId (updated)
+            }
+
+            // input.value does not work for (property => attribute)
+            {
+                let input = document.querySelector("input");
+
+                // attribute => property
+                input.setAttribute("value", "text");
+                alert(input.value); // text (updated)
+
+                // property => attribute
+                input.value = "newValue";
+                alert(input.getAttribute("value")); // text (not updated)
+            }
+        </script>
+
+        <div id="div" style="color: red; font-size: 120%">Hello</div>
+        <script>
+            // attribute: string
+            alert(div.getAttribute("style")); // color: red; font-size: 120%
+
+            // property: object
+            alert(div.style); // [object CSSStyleDeclaration]
+            alert(div.style.color); // red
+        </script>
+
+        <style>
+            .order[data-order-state="new"] {
+                color: green;
+            }
+
+            .order[data-order-state="pending"] {
+                color: blue;
+            }
+
+            .order[data-order-state="cancelled"] {
+                color: red;
+            }
+        </style>
+        <div id="order" class="order" data-order-state="pending">
+            A new order.
+        </div>
+        <script>
+            /**
+             * All attributes starting with “data-” are reserved for programmers’
+               use. They are available in the dataset property.
+             * */
+            {
+                // read
+                alert(order.dataset.orderState);
+
+                // modify
+                setTimeout(
+                    () => (order.dataset.orderState = "cancelled"),
+                    2000
+                );
+            }
+        </script>
+    </body>
+</html>

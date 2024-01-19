@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Element size and scrolling</title>
+    </head>
+    <body>
+        <main style="position: relative; height: 200px" id="main">
+            <article>
+                <div
+                    id="div"
+                    style="position: absolute; left: 180px; top: 180px"
+                >
+                    ...
+                </div>
+            </article>
+        </main>
+        <script>
+            /**
+             * offsetParent: is the nearest ancestor that the browser uses for
+               calculating coordinates.
+             * 
+             * offsetLeft/Top: x/y coordinates relative to offsetParent upper-left
+               corner.
+             * */
+            {
+                alert(div.offsetParent.nodeName); // MAIN
+                alert(div.offsetLeft); // 180
+                alert(div.offsetTop); // 180
+            }
+        </script>
+
+        <div id="example">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta
+            reprehenderit earum laboriosam quisquam eligendi odit eaque
+            praesentium tenetur, eum consectetur ut voluptatibus unde sit
+            accusantium odio labore pariatur tempore quam. Aperiam atque dolore
+            fugiat error natus! Perferendis ullam enim facilis esse vero vitae
+            ea magni repellendus, reiciendis nobis nam deleniti hic commodi
+            laudantium fuga doloremque cumque non ex totam illo! Atque aliquid,
+            totam distinctio hic reiciendis alias reprehenderit suscipit
+            quibusdam ad omnis aperiam tempora facere doloribus odit, eaque
+            maxime possimus magnam voluptatibus exercitationem consequuntur iure
+            minima tempore. Atque, tenetur soluta. Minima, saepe explicabo.
+            Officiis accusantium, nobis quae hic, a praesentium voluptatibus
+            itaque dolore blanditiis asperiores ad, maiores perspiciatis
+            sapiente rem sunt expedita ut aspernatur quisquam voluptatum amet.
+            Autem, modi voluptatibus? Itaque, quos at dolore saepe veritatis
+            ullam deserunt necessitatibus molestias consectetur atque animi iste
+            optio modi minus eaque aperiam dolorum aliquam, et iure architecto
+            quis est placeat officia! Sit, numquam. Neque exercitationem modi
+            aperiam quia eos, necessitatibus atque ad delectus soluta sunt id
+            laudantium pariatur sint fugiat error maiores aliquam molestias
+            eligendi in itaque dolor? Sint maiores explicabo ea repellendus.
+            Quod dolorum maxime doloremque vel est adipisci nobis ipsa et esse
+            voluptas sit laudantium iure ipsam nam necessitatibus dolores,
+            magnam illo? Perspiciatis dolorum fugit iste magnam corporis impedit
+            sint pariatur! Quis corporis velit vel, repellendus ducimus hic
+            cumque ad possimus iure ut. Commodi et culpa earum totam nihil
+            pariatur architecto sunt voluptatum quidem. Rerum, explicabo cumque
+            facere dolor aspernatur error. Enim, dolore! Ipsum asperiores
+            pariatur, rerum voluptatum nemo, dolores quos earum cupiditate
+            officiis, magnam eligendi molestiae harum ab consequatur. Magnam non
+            doloribus quo ullam, cupiditate magni assumenda error eveniet
+            corporis? Minima repudiandae enim excepturi aliquid, tempora minus.
+            Vero quisquam doloribus aspernatur nostrum tempore corporis saepe
+            maxime. Maiores unde fugiat libero, voluptas cupiditate temporibus.
+            Dolores asperiores voluptatibus molestiae quia repudiandae aliquid.
+        </div>
+        <style>
+            #example {
+                width: 300px;
+                height: 200px;
+                border: 25px solid #e8c48f;
+                padding: 20px;
+                overflow: auto;
+            }
+        </style>
+        <script>
+            // offsetWidth/Height: provides full size including borders
+            {
+                alert(example.offsetWidth); // 390 = 25 + 20 + 286 + 20 + 14 + 25
+                alert(example.offsetHeight); // 290 = 25 + 20 + 200 + 20 + 25
+            }
+
+            // clientTop/Left: measure the border
+            {
+                alert(example.clientLeft); // 25, may include left scrollbars
+                alert(example.clientTop); // 25
+            }
+
+            // clientWidth/Height: measure the area inside the borders without the scrollbar
+            {
+                alert(example.clientWidth); // 326 = 20 + 286 + 20
+                alert(example.clientHeight); // 240 = 20 + 200 + 20
+            }
+
+            // scrollWidth/Height: same as above, but include scrolled hidden parts
+            {
+                alert(example.scrollWidth); // 326, no horizontal scroll
+                alert(example.scrollHeight); // 1107
+            }
+
+            // scrollLeft/Top: width/height of the hidden part
+            {
+                alert(example.scrollLeft); // 0, no horizontal scroll
+                alert(example.scrollTop); // 0, text is at the beginning
+
+                example.scrollTop += 500; // scrolled down 500px
+            }
+        </script>
+    </body>
+</html>
