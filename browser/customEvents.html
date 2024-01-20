@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dispatching custom events</title>
+    </head>
+    <body>
+        <!--
+         * dispatchEvent
+         * used to run the created event on an element
+        -->
+        <h1 id="elem1">Hello from the script</h1>
+        <script>
+            {
+                document.addEventListener("hello", function (event) {
+                    alert(`Hello from ${event.target.tagName}`);
+                });
+
+                let event = new Event("hello", { bubbles: true }); // it bubbles
+                elem1.dispatchEvent(event);
+            }
+        </script>
+
+        <!--
+         * UIEvents
+         * should be used instead of 'new Event()' because there are other
+           standard properties for the type of event.
+        -->
+        <script>
+            // MouseEvent
+            {
+                let event = new MouseEvent("click", {
+                    bubbles: true,
+                    cancelable: true, // if true, may be prevented
+                    clientX: 100,
+                    clientY: 100,
+                });
+
+                alert(event.clientX); // 100
+            }
+        </script>
+
+        <!--
+         * Custom Events
+         * should be used when creating a custom events because it allows to add
+           additional informations in 'detail' property 
+        -->
+        <h1 id="elem2">Hello for Leonardo!</h1>
+        <script>
+            {
+                elem2.addEventListener("hello", function (event) {
+                    alert(event.detail.name);
+                });
+
+                elem2.dispatchEvent(
+                    new CustomEvent("hello", {
+                        detail: {
+                            name: "Leonardo",
+                        },
+                    })
+                );
+            }
+        </script>
+
+        <!--
+         * event.preventDefault()
+         * by calling it, an event handler may send a signal that those actions
+           should be cancelled.
+        -->
+        <pre id="rabbit">
+            |\   /|
+             \|_|/
+             /. .\
+            =\_Y_/=
+             {>o<}
+        </pre>
+        <button onclick="hide()">Hide()</button>
+        <script>
+            {
+                function hide() {
+                    let event = new CustomEvent("hide", {
+                        cancelable: true,
+                    });
+
+                    if (!rabbit.dispatchEvent(event)) { // if 'yes', returns false
+                        alert("The action was prevented by a handler");
+                    } else {
+                        rabbit.hidden = true;
+                    }
+                }
+
+                rabbit.addEventListener("hide", function (event) {
+                    if (confirm("Call preventDefault?")) {
+                        event.preventDefault();
+                    }
+                });
+            }
+        </script>
+
+        <!-- Events-in-events are synchronous -->
+        <button id="menu">Menu (click me)</button>
+        <script>
+            {
+                menu.onclick = function (event) {
+                    alert(1);
+
+                    menu.dispatchEvent(
+                        new CustomEvent("menu-open", {
+                            bubbles: true,
+                        })
+                    );
+
+                    alert(2);
+                }; // 1 -> menu opened -> 2
+
+                document.addEventListener("menu-open", () =>
+                    alert("menu opened")
+                );
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Event delegation</title>
+    </head>
+    <body>
+        <!--
+         * Event delegation
+         * used to add the same handling for many similar elements
+        -->
+        <style>
+            #bagua-table th {
+                text-align: center;
+                font-weight: bold;
+            }
+
+            #bagua-table td {
+                width: 150px;
+                white-space: nowrap;
+                text-align: center;
+                vertical-align: bottom;
+                padding-top: 5px;
+                padding-bottom: 12px;
+            }
+
+            #bagua-table .nw {
+                background: #999;
+            }
+
+            #bagua-table .n {
+                background: #03f;
+                color: #fff;
+            }
+
+            #bagua-table .ne {
+                background: #ff6;
+            }
+
+            #bagua-table .w {
+                background: #ff0;
+            }
+
+            #bagua-table .c {
+                background: #60c;
+                color: #fff;
+            }
+
+            #bagua-table .e {
+                background: #09f;
+                color: #fff;
+            }
+
+            #bagua-table .sw {
+                background: #963;
+                color: #fff;
+            }
+
+            #bagua-table .s {
+                background: #f60;
+                color: #fff;
+            }
+
+            #bagua-table .se {
+                background: #0c3;
+                color: #fff;
+            }
+
+            #bagua-table .highlight {
+                background: black;
+                color: white;
+            }
+        </style>
+        <table id="bagua-table">
+            <tr>
+                <th colspan="3">
+                    <em>Bagua</em> Chart: Direction, Element, Color, Meaning
+                </th>
+            </tr>
+            <tr>
+                <td class="nw">
+                    <strong>Northwest</strong> <br />Metal <br />Silver
+                    <br />Elders
+                </td>
+                <td class="n">
+                    <strong>North</strong> <br />Water <br />Blue <br />Change
+                </td>
+                <td class="ne">
+                    <strong>Northeast</strong> <br />Earth <br />Yellow
+                    <br />Direction
+                </td>
+            </tr>
+            <tr>
+                <td class="w">
+                    <strong>West</strong> <br />Metal <br />Gold <br />Youth
+                </td>
+                <td class="c">
+                    <strong>Center</strong> <br />All <br />Purple <br />Harmony
+                </td>
+                <td class="e">
+                    <strong>East</strong> <br />Wood <br />Blue <br />Future
+                </td>
+            </tr>
+            <tr>
+                <td class="sw">
+                    <strong>Southwest</strong> <br />Earth <br />Brown
+                    <br />Tranquility
+                </td>
+                <td class="s">
+                    <strong>South</strong> <br />Fire <br />Orange <br />Fame
+                </td>
+                <td class="se">
+                    <strong>Southeast</strong> <br />Wood <br />Green
+                    <br />Romance
+                </td>
+            </tr>
+        </table>
+        <script>
+            {
+                let selectedTd;
+                let table = document.getElementById("bagua-table");
+
+                table.onclick = function (event) {
+                    let td = event.target.closest("td");
+
+                    if (!td) return;
+
+                    if (!table.contains(td)) return;
+
+                    highlight(td);
+                };
+
+                function highlight(td) {
+                    if (selectedTd) {
+                        selectedTd.classList.remove("highlight");
+                    }
+
+                    selectedTd = td;
+                    selectedTd.classList.add("highlight");
+                }
+            }
+        </script>
+
+        <!-- Delegation example: actions in markup -->
+        <div id="menu">
+            <button data-action="save">Save</button>
+            <button data-action="load">Load</button>
+            <button data-action="search">Search</button>
+        </div>
+        <script>
+            {
+                class Menu {
+                    constructor(elem) {
+                        this._elem = elem;
+                        elem.onclick = this.onClick.bind(this);
+                    }
+
+                    save() {
+                        alert("saving");
+                    }
+
+                    load() {
+                        alert("loading");
+                    }
+
+                    search() {
+                        alert("searching");
+                    }
+
+                    onClick(event) {
+                        let action = event.target.dataset.action;
+                        if (action) this[action]();
+                    }
+                }
+
+                new Menu(menu);
+            }
+        </script>
+
+        <!--
+         * The 'behavior' pattern
+         * used to add behaviors to elements declaratively
+        -->
+        Counter: <input type="button" value="1" data-counter /> One more
+        counter: <input type="button" value="2" data-counter />
+        <script>
+            // behavior: Counter
+            {
+                document.addEventListener("click", function (event) {
+                    if (event.target.dataset.counter != undefined) {
+                        event.target.value++;
+                    }
+                });
+            }
+        </script>
+
+        <button data-toggle-id="subscribe-email">
+            Show the subscription form
+        </button>
+        <form id="subscribe-email" hidden>
+            Your email: <input type="email" />
+        </form>
+        <script>
+            // behavior: Toggler
+            {
+                document.addEventListener("click", function (event) {
+                    let id = event.target.dataset.toggleId;
+                    if (!id) return;
+
+                    let elem = document.getElementById(id);
+
+                    elem.hidden = !elem.hidden;
+                });
+            }
+        </script>
+    </body>
+</html>

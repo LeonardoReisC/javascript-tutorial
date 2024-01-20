@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Bubbling and Capturing</title>
+    </head>
+    <body>
+        <!-- 
+         * Bubbling
+         * an event bubbles from the inner element up through parents
+        -->
+        <style>
+            .bubble,
+            .bubble * {
+                margin: 10px;
+                border: 1px solid black;
+            }
+        </style>
+        <form onclick="alert(this.tagName)" class="bubble">
+            FORM
+            <div onclick="alert(this.tagName)">
+                DIV
+                <p onclick="alert(this.tagName)">P</p>
+            </div>
+        </form>
+
+        <!-- event.target: returns the nested element that caused the event -->
+        <form class="bubble" id="elem1">
+            FORM
+            <div>
+                DIV
+                <p>P</p>
+            </div>
+        </form>
+        <script>
+            {
+                elem1.onclick = function (event) {
+                    event.target.style.backgroundColor = "yellow";
+
+                    setTimeout(() => {
+                        alert(
+                            `target = ${event.target.tagName}\nthis = ${this.tagName}`
+                        );
+                        event.target.style.removeProperty("background-color");
+                    }, 1000);
+                };
+            }
+        </script>
+
+        <!-- Stop bubbling -->
+        <form class="bubble" onclick="alert('The bubble does not reach here')">
+            FORM
+            <div onclick="event.stopPropagation()">DIV</div>
+        </form>
+
+        <!--
+         * There are 3 phases of event propagation
+         * Capturing phase: the event goes down to the element
+         * Target phase: the event reached the target element
+         * Bubbling phase: the event bubbles up from the element
+        -->
+        <form class="bubble" id="elem2">
+            FORM
+            <div>
+                DIV
+                <p>P</p>
+            </div>
+        </form>
+        <script>
+            {
+                for (let elem of document.querySelectorAll(
+                    "html, body, #elem2, #elem2 *"
+                )) {
+                    elem.addEventListener(
+                        "click",
+                        (e) => alert(`Capturing: ${elem.tagName}`),
+                        true // same as { capture: true }
+                    );
+                    elem.addEventListener("click", (e) =>
+                        alert(`Bubbling: ${elem.tagName}`)
+                    );
+                }
+            }
+        </script>
+    </body>
+</html>

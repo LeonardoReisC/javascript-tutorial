@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Browser default actions</title>
+    </head>
+    <body>
+        <!-- Preventing browser default actions -->
+        <style>
+            .menu li {
+                display: inline-block;
+                margin: 0;
+            }
+
+            .menu > li a {
+                display: inline-block;
+                margin: 0 2px;
+                outline: none;
+                text-align: center;
+                text-decoration: none;
+                font: 14px/100% sans-serif;
+                padding: 0.5em 2em 0.55em;
+                text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+                border-radius: 0.5em;
+                box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+                color: #d9eef7;
+                border: solid 1px #0076a3;
+                background: #0095cd;
+            }
+
+            .menu > li:hover a {
+                text-decoration: none;
+                background: #007ead;
+            }
+        </style>
+        <ul id="menu" class="menu">
+            <li><a href="/html">HTML</a></li>
+            <li><a href="/css">CSS</a></li>
+            <li><a href="/javascript">JavaScript</a></li>
+        </ul>
+        <script>
+            {
+                menu.onclick = function (event) {
+                    if (event.target.nodeName != "A") return;
+
+                    let href = event.target.getAttribute("href");
+                    alert(href);
+
+                    return false; // prevent browser action(don't go to the URL)
+                }; // or event.preventDefault()
+            }
+        </script>
+
+        <!--
+         * Follow-up events
+         * if we prevent the first, there will be no second
+        -->
+        <input value="Focus works" onclick="this.value = ''" />
+        <input
+            onmousedown="return false"
+            onfocus="this.value = ''"
+            value="Click me"
+        />
+
+        <!--
+         * event.defaultPrevented
+         * if true, the default action was prevented
+         * can be used to signal other handlers that the event was handled
+        -->
+        <p>Right-click here for the document context menu</p>
+        <button id="elem1">Right-click here for the button context menu</button>
+        <script>
+            {
+                elem1.addEventListener("oncontextmenu", function (event) {
+                    event.preventDefault();
+                    alert("Button context menu");
+                });
+
+                document.oncontextmenu = function (event) {
+                    if (event.defaultPrevented) return;
+
+                    event.preventDefault();
+                    alert("Document context menu");
+                };
+            }
+        </script>
+    </body>
+</html>

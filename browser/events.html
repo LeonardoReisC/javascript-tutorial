@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Introduction to Events</title>
+    </head>
+    <body>
+        <!-- Event Handlers -->
+        <input type="button" onclick="countRabbits()" value="HTML attribute" />
+        <script>
+            // HTML-attribute
+            {
+                function countRabbits() {
+                    for (let i = 1; i <= 3; i++) {
+                        alert(`Rabbit number: ${i}`);
+                    }
+                }
+            }
+        </script>
+
+        <input type="button" value="DOM property" id="elem1" />
+        <script>
+            // DOM property
+            {
+                elem1.onclick = function () {
+                    alert("Clicked!");
+                };
+            }
+        </script>
+
+        <!-- 
+         * Acessing the element: this
+         * this = the element
+        -->
+        <button onclick="alert(this.innerHTML)">Click me!</button>
+
+        <!-- 
+         * elem.addEventListener(event, handler, [options]) 
+         * allows to add multiple handlers
+         * [options]: and addtional object with properties
+           once: if true, listener is automatically removed after it triggers
+           capture: if true, the event will be handled in the capture phase
+           passive: if true, the handler will not call preventDefault()
+        -->
+        <input type="button" value="addEventListener" id="elem2" />
+        <script>
+            {
+                function handler1() {
+                    alert("Thanks!");
+                }
+
+                function handler2() {
+                    alert("Bye!");
+                }
+
+                elem2.onclick = () => alert("Hello World");
+                elem2.addEventListener("click", handler1); // Thanks!
+                elem2.addEventListener("click", handler2); // Bye!
+            }
+        </script>
+
+        <!-- Event object -->
+        <input type="button" value="Event object" id="elem3" />
+        <script>
+            {
+                elem3.onclick = function (event) {
+                    alert(`${event.type} at ${event.currentTarget.nodeName}`);
+                    alert(`Coordinates: (${event.clientX}, ${event.clientY})`);
+                };
+            }
+        </script>
+
+        <!-- 
+         * Object Handlers
+         * when an event occurs, its 'handleEvent' method is called.
+        -->
+        <button id="elem4">Object Handlers</button>
+        <script>
+            {
+                class Menu {
+                    handleEvent(event) {
+                        let method = `on${event.type[0].toUpperCase()}${event.type.slice(
+                            1
+                        )}`;
+                        this[method](event);
+                    }
+
+                    onMousedown() {
+                        elem4.innerHTML = "pressed";
+                    }
+
+                    onMouseup() {
+                        elem4.innerHTML = "released";
+                    }
+                }
+
+                let menu = new Menu();
+
+                elem4.addEventListener("mousedown", menu);
+                elem4.addEventListener("mouseup", menu);
+            }
+        </script>
+    </body>
+</html>
