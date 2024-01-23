@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Pointer Events</title>
+        <style>
+            [id^="area"] {
+                width: 500px;
+                height: 250px;
+                overflow-y: auto;
+                border: 1px solid black;
+                display: block;
+            }
+
+            [id^="ball"] {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                margin-bottom: 20px;
+            }
+
+            #slider {
+                border-radius: 5px;
+                background: #e0e0e0;
+                width: 310px;
+                height: 15px;
+                margin: 5px;
+            }
+
+            #thumb {
+                width: 10px;
+                height: 25px;
+                border-radius: 3px;
+                position: relative;
+                left: 10px;
+                top: -5px;
+                background-color: blue;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+    <body>
+        <!--
+         * Multi-touch
+         * isPrimary: true if it is the first finger touch
+        -->
+        <div id="area1"></div>
+        <script>
+            {
+                function log(event) {
+                    area.insertAdjacentHTML(
+                        "beforeend",
+                        `<div>${event.type} isPrimary=${event.isPrimary} pointerId=${event.pointerId}</div>`
+                    );
+                    area.scrollTop = 1e9;
+                }
+
+                area.onpointerdown = log;
+                area.onpointerup = log;
+            }
+        </script>
+
+        <!--
+         * Event: pointercancell
+         * fired when a ongoing pointer interaction is aborted
+        -->
+        <p>Drag the ball</p>
+        <img
+            src="https://www.svgrepo.com/show/490541/ball-volleyball.svg"
+            id="ball1"
+        />
+        <textarea id="area2"></textarea>
+        <script>
+            {
+                let lastEventType = null;
+                let n = 1;
+
+                function log(event) {
+                    if (lastEventType == event.type) {
+                        n++;
+                        area2.value = area2.value.replace(
+                            /.*\n$/,
+                            `${event.type} * ${n}\n`
+                        );
+                        return;
+                    }
+                    lastEventType = event.type;
+                    area2.value += `${event.type}\n`;
+                    area2.scrollTop = 1e9;
+                }
+
+                ball1.onpointerdown = log;
+                ball1.onpointermove = log;
+                ball1.onpointercancel = log;
+                ball1.onpointerup = log;
+            }
+        </script>
+
+        <!-- Solution to pointercancel above -->
+        <p>Solution</p>
+        <p>Drag the ball</p>
+        <img
+            src="https://www.svgrepo.com/show/490541/ball-volleyball.svg"
+            id="ball2"
+            style="touch-action: none"
+        />
+        <textarea id="area3"></textarea>
+        <script>
+            {
+                let lastEventType = null;
+                let n = 1;
+
+                function log(event) {
+                    if (lastEventType == event.type) {
+                        n++;
+                        area3.value = area3.value.replace(
+                            /.*\n$/,
+                            `${event.type} * ${n}\n`
+                        );
+                        return;
+                    }
+                    lastEventType = event.type;
+                    area3.value += `${event.type}\n`;
+                    area3.scrollTop = 1e9;
+                }
+
+                // disable own browser drag'n'drop support
+                ball2.ondragstart = () => false;
+
+                ball2.onpointerdown = log;
+                ball2.onpointermove = log;
+                ball2.onpointercancel = log;
+                ball2.onpointerup = log;
+            }
+        </script>
+
+        <!--
+         * Pointer capturing
+         * used to simplify drag'n'drop interations
+         * elem.setPointerCapture(pointerId): retargets all subsequents events
+           with the given pointerId to elem
+
+         * binding is removed after pointerup or pointercancel.
+        -->
+        <div id="slider">
+            <div id="thumb"></div>
+        </div>
+        <script>
+            {
+                let shiftX;
+                function onThumbDown(event) {
+                    event.preventDefault();
+
+                    shiftX = event.clientX - thumb.getBoundingClientRect().left;
+
+                    thumb.setPointerCapture(event.pointerId);
+
+                    thumb.onpointermove = onThumbMove;
+
+                    thumb.onpointerup = (event) => {
+                        thumb.onpointermove = null;
+                        thumb.onpointerup = null;
+                    };
+                }
+
+                function onThumbMove(event) {
+                    let newLeft =
+                        event.clientX -
+                        shiftX -
+                        slider.getBoundingClientRect().left;
+
+                    if (newLeft < 0) {
+                        newLeft = 0;
+                    }
+
+                    let rightEdge = slider.offsetWidth - thumb.offsetWidth;
+                    if (newLeft > rightEdge) {
+                        newLeft = rightEdge;
+                    }
+
+                    thumb.style.left = `${newLeft}px`;
+                }
+                thumb.onpointerdown = onThumbDown;
+
+                thumb.ondragstart = () => false;
+            }
+        </script>
+    </body>
+</html>

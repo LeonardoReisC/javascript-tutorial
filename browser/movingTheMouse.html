@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Moving the mouse</title>
+
+        <style>
+            .container {
+                padding: 10px;
+
+                margin-bottom: 5px;
+                box-sizing: border-box;
+            }
+
+            [id^="outer"] {
+                display: inline-block;
+                width: 250px;
+                height: 200px;
+                background-color: purple;
+                margin-right: 20px;
+            }
+
+            [id^="inner"] {
+                width: 70%;
+                height: 60%;
+                background-color: yellow;
+
+                position: relative;
+                margin: auto auto;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            [id^="log"] {
+                display: inline-block;
+                width: 500px;
+                height: 200px;
+                box-sizing: border-box;
+                overflow-y: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <!--
+         * Events mouseover/out, relatedTtarget
+         * mouseover: relatedTarget -> target
+         * mouseout: target -> relatedTarget
+        -->
+        <div class="container">
+            <div id="outer1">
+                <div id="inner1"></div>
+            </div>
+            <textarea id="log1"></textarea>
+        </div>
+        <script>
+            {
+                function handler(event) {
+                    function str(el) {
+                        if (!el) return "null";
+                        return el.className || el.id || el.tagName;
+                    }
+
+                    log1.value +=
+                        `${event.type}: target=${str(event.target)} ` +
+                        `| relatedTarget=${str(event.relatedTarget)}\n`;
+                    log1.scrollTop = log1.scrollHeight;
+
+                    if (event.type == "mouseover") {
+                        event.target.style.backgroundColor = "red";
+                    }
+
+                    if (event.type == "mouseout") {
+                        event.target.style.backgroundColor = "";
+                    }
+                }
+
+                outer1.onmouseover = outer1.onmouseout = handler; // bubbles up
+            }
+        </script>
+
+        <!--
+         * Events mouseenter/leave
+         * transitions to/from descendants are not counted
+         * do not bubble.
+        -->
+        <div class="container">
+            <div id="outer2">
+                <div id="inner2"></div>
+            </div>
+            <textarea id="log2"></textarea>
+        </div>
+        <script>
+            {
+                function handler(event) {
+                    function str(el) {
+                        if (!el) return "null";
+                        return el.className || el.id || el.tagName;
+                    }
+
+                    log2.value += `${event.type}: target=${str(
+                        event.target
+                    )}\n`;
+                    log2.scrollTop = log2.scrollHeight;
+
+                    if (event.type == "mouseenter") {
+                        event.target.style.backgroundColor = "red";
+                    }
+
+                    if (event.type == "mouseleave") {
+                        event.target.style.backgroundColor = "";
+                    }
+                }
+
+                outer2.onmouseenter = outer2.onmouseleave = handler;
+            }
+        </script>
+    </body>
+</html>

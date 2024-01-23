@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Drag'n'Drop</title>
+        <style>
+            .droppable {
+                width: 250px;
+                height: 200px;
+                border: 1px solid black;
+                display: inline-block;
+            }
+
+            #ball {
+                border-radius: 50%;
+                width: 60px;
+                height: 60px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Drag'n'Drop Algorithm -->
+        <p>Drag the ball</p>
+        <div class="droppable"></div>
+        <img
+            src="https://www.svgrepo.com/show/490541/ball-volleyball.svg"
+            id="ball"
+        />
+        <script>
+            {
+                // potential droppable that we're flying over
+                let currentDroppable = null;
+
+                ball.onmousedown = function (event) {
+                    // getting the distance from pointer to left-upper corner
+                    let shiftX =
+                        event.clientX - ball.getBoundingClientRect().left;
+                    let shiftY =
+                        event.clientY - ball.getBoundingClientRect().top;
+
+                    // prepare to moving
+                    ball.style.position = "absolute";
+                    ball.style.zIndex = 1000;
+
+                    /**
+                     * move it out of any current parents into body to make it
+                       relative to the body
+                     * */
+                    document.body.append(ball);
+
+                    // moves the ball at coordinates (pageX, pageY)
+                    function moveAt(pageX, pageY) {
+                        ball.style.left = `${pageX - shiftX}px`;
+                        ball.style.top = `${pageY - shiftY}px`;
+                    }
+                    moveAt(event.pageX, event.pageY);
+
+                    function onMouseMove(event) {
+                        moveAt(event.pageX, event.pageY);
+
+                        // remove ball as the top element first
+                        ball.hidden = true;
+
+                        // tries to find deepest element
+                        let elemBelow = document.elementFromPoint(
+                            event.clientX,
+                            event.clientY
+                        );
+
+                        // recover ball
+                        ball.hidden = false;
+
+                        // if out of the window
+                        if (!elemBelow) return;
+
+                        let droppableBelow = elemBelow.closest(".droppable");
+                        if (currentDroppable != droppableBelow) {
+                            // if there is a previous droppable
+                            if (currentDroppable) {
+                                leaveDroppable(currentDroppable);
+                            }
+                            currentDroppable = droppableBelow;
+
+                            // if there is no droppable below
+                            if (currentDroppable) {
+                                enterDroppable(currentDroppable);
+                            }
+                        }
+                    }
+
+                    // move the ball on mousemove
+                    document.addEventListener("mousemove", onMouseMove);
+
+                    // drop the ball, remove unneeded handlers
+                    ball.onmouseup = function () {
+                        document.removeEventListener("mousemove", onMouseMove);
+                        ball.onmouseup = null;
+                    };
+                };
+
+                function enterDroppable(elem) {
+                    elem.style.background = "rgba(0, 255, 0, 0.2)";
+                }
+
+                function leaveDroppable(elem) {
+                    elem.style.background = "";
+                }
+
+                // disable own browser drag'n'drop support
+                ball.ondragstart = function (event) {
+                    return false;
+                };
+            }
+        </script>
+    </body>
+</html>

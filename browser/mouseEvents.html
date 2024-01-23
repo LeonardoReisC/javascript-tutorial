@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Mouse events</title>
+    </head>
+    <body>
+        <!--
+         * Modifiers: shift, alt, ctrl and meta
+         * include the information about pressed modifier keys.
+        -->
+        <button id="button1">Alt+Shift+Click on me</button>
+        <script>
+            {
+                button1.onclick = function (event) {
+                    if (event.altKey && event.shiftKey) {
+                        alert("Click!");
+                    }
+                };
+            }
+        </script>
+
+        <!--
+         * Coordinates
+         * window-relative: clientX/Y
+         * document-relative: pageX/Y
+        -->
+        <input
+            onmousemove="this.value=`(${event.clientX}, ${event.clientY})`"
+            value="Mouse over me"
+        />
+
+        <!-- Preventing selection on mousedown -->
+        Before...
+        <b ondblclick="alert('Click!')" onmousedown="return false"
+            >Double-click me</b
+        >
+        ...After
+
+        <!-- Preventing copying -->
+        <div oncopy="alert('Copy forbidden!'); return false">
+            Try to copy this text.
+        </div>
+    </body>
+</html>

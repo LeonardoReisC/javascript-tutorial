@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Keyboard: keydown and keyup</title>
+    </head>
+    <body>
+        <!--
+         * event.code: physical key code(useful for hotkeys)
+         * event.key: character(useful for layout-dependent keys)
+        -->
+        <div id="area"></div>
+        <script>
+            "use strict";
+            {
+                document.addEventListener("keydown", function (event) {
+                    if (
+                        event.code == "KeyZ" &&
+                        (event.ctrlKey || event.metaKey)
+                    ) {
+                        alert("Undo!");
+                    }
+
+                    if (event.repeat) {
+                        area.insertAdjacentHTML(
+                            "beforeend",
+                            "<div>HOLD ON!!</div>"
+                        );
+                    }
+                });
+            }
+        </script>
+
+        <!-- Default actions -->
+        <input
+            type="text"
+            onkeydown="return checkPhoneKey(event.key)"
+            placeholder="phone number"
+        />
+        <script>
+            {
+                function checkPhoneKey(key) {
+                    return (
+                        (key >= "0" && key <= "9") ||
+                        [
+                            "+",
+                            "-",
+                            "(",
+                            ")",
+                            "ArrowLeft",
+                            "ArrowRight",
+                            "Delete",
+                            "Backspace",
+                        ].includes(key)
+                    ); // disable default action(return false) if key not included
+                }
+            }
+        </script>
+    </body>
+</html>
