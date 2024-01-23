@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Form properties and methods</title>
+    </head>
+    <body>
+        <!-- Navigation: form and elements -->
+        <form id="my">
+            <input type="radio" name="age" value="10" />
+            <input type="radio" name="age" value="20" />
+        </form>
+        <script>
+            {
+                let form = document.forms.my; // <form id="my"> element
+
+                // get the collection ageElems
+                let ageElems = form.elements.age; // or form.age
+
+                alert(ageElems[0].value); // 10
+                alert(ageElems[1].value); // 20
+            }
+        </script>
+
+        <!--
+         * Backreference: elem.form
+         * a form references all elements, and elements reference the form
+        -->
+        <form id="form1">
+            <input type="text" name="login" />
+        </form>
+        <script>
+            {
+                // form -> element
+                let login = form1.login;
+
+                // element -> form
+                alert(login.form.id); // form1
+            }
+        </script>
+
+        <!-- select and option -->
+        <select id="select">
+            <option value="grape">Grape</option>
+            <option value="pineapple">Pineapple</option>
+            <option value="watermelon">Watermelon</option>
+        </select>
+        <script>
+            {
+                // all 3 lines do the same thing
+                select.options[1].selected = true;
+                select.selectedIndex = 1;
+                select.value = "pineapple";
+            }
+        </script>
+    </body>
+</html>

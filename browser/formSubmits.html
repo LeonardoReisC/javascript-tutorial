@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Forms: event and method submit</title>
+    </head>
+    <body>
+        <!--
+         * Event: submit
+         * there're 2 ways to submit a form
+           - click on <input type="submit">
+           - press Enter(triggers "click" event)
+        -->
+        <form onsubmit="alert('submit'); return false">
+            First: Enter in the input field
+            <input type="text" value="press &lt;Enter&gt;" />
+            Second: Click "submit"
+            <input type="submit" value="Submit" />
+        </form>
+
+        <!--
+         * Method: submit
+         * submits a form to the server manually
+        -->
+        <script>
+            {
+                let form = document.createElement("form");
+                form.action = "https://github.com/LeonardoReisC?";
+                form.method = "GET";
+
+                form.innerHTML = '<input name="tab" value="repositories">';
+
+                document.body.append(form);
+
+                form.submit();
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Events: change, input, cut, copy, paste</title>
+    </head>
+    <body>
+        <!--
+         * Event: change
+         * triggers when the event has finished changing
+         * for text: when it loses focus
+         * for select, checkbox/radio: after the selection
+        -->
+        <input type="text" onchange="alert(this.value)" />
+        <input type="button" value="Button" />
+        <select onchange="alert(this.value)">
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+            <option value="4">Option 4</option>
+        </select>
+
+        <!--
+         * Event: input
+         * triggers every time after a value is modified by the user
+        -->
+        <input type="text" id="input1" /> oninput: <span id="result"></span>
+        <script>
+            {
+                input1.oninput = function () {
+                    result.innerHTML = input1.value;
+                };
+            }
+        </script>
+
+        <!--
+         * Events: cut, copy, paste
+         * occurs on cutting/copying/pasting a value
+        -->
+        <input type="text" id="input2" />
+        <script>
+            {
+                input2.onpaste = function (event) {
+                    alert(
+                        `paste: ${event.clipboardData.getData("text/plain")}`
+                    );
+                    event.preventDefault();
+                };
+
+                input2.oncut = input2.oncopy = function (event) {
+                    alert(`${event.type}: ${document.getSelection()}`);
+                    event.preventDefault();
+                };
+            }
+        </script>
+    </body>
+</html>
