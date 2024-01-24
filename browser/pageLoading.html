@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Page: DOMContentLoaded, load, beforeunload, unload</title>
+    </head>
+    <body>
+        <!--
+         * DOMContentLoaded
+         * triggers when the browser fully loaded HTML, and DOM tree is built,
+           but external resources may not yet have loaded 
+         * happens on the 'document' object
+        -->
+        <img
+            src="https://en.js.cx/clipart/train.gif?speed=1&cache=0"
+            id="img1"
+        />
+        <script>
+            {
+                function ready() {
+                    alert("DOM is ready");
+
+                    // image is not yet loaded, so the size is 0x0
+                    alert(`img size: ${img1.offsetWidth}x${img1.offsetHeight}`);
+                }
+
+                document.addEventListener("DOMContentLoaded", ready);
+            }
+        </script>
+
+        <!--
+         * window.onload
+         * triggers when the whole page is loaded, including external resources
+           like styles and images
+        -->
+        <script>
+            {
+                window.onload = function () {
+                    alert("Page loaded");
+
+                    alert(`img size: ${img1.offsetWidth}x${img1.offsetHeight}`);
+                };
+            }
+        </script>
+
+        <!--
+         * window.onunload
+         * triggers when a user leaves the page
+        -->
+        <script>
+            {
+                let analyticsData = {
+                    /* object with gathered data */
+                };
+
+                window.addEventListener("unload", function () {
+                    // sends data in background; transition not delayed
+                    navigator.sendBeacon(
+                        "/analytics",
+                        JSON.stringify(analyticsData)
+                    );
+                });
+            }
+        </script>
+
+        <!--
+         * window.onbeforeunload
+         * triggers when a user initiated navigation away from the page or tries
+           to close the window
+         * asks for additional confirmation
+        -->
+        <script>
+            {
+                // browser may ask the user if he is sure
+                window.onbeforeunload = function () {
+                    return false;
+                };
+            }
+        </script>
+    </body>
+</html>

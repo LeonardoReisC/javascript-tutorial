@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Scripts: async, defer</title>
+    </head>
+    <body>
+        <!--
+     * defer
+     * tells the browser not to wait for the script
+     * the browser will keep loading HTML and building DOM
+     * the script loads in the background and then run when DOM is fully built
+     * keeps their relative order
+    -->
+        <p>...content before script...</p>
+        <script>
+            {
+                document.addEventListener("DOMContentLoaded", function () {
+                    alert("DOM ready!");
+                });
+            }
+        </script>
+
+        <script
+            defer
+            src="https://javascript.info/article/script-async-defer/long.js"
+        ></script>
+        <script
+            defer
+            src="https://javascript.info/article/script-async-defer/small.js"
+        ></script>
+        <p>...content after script...</p>
+
+        <!--
+         * async
+         * the browser does not block on async scripts
+         * other scripts do not wait for async scripts, and vice-versa
+         * DOMContentLoaded and async scripts do not wait for each other
+         * loads in the background and runs when READY
+
+        -->
+        <p>...content before scripts...</p>
+
+        <script
+            async
+            src="https://javascript.info/article/script-async-defer/long.js"
+        ></script>
+        <script
+            async
+            src="https://javascript.info/article/script-async-defer/small.js"
+        ></script>
+
+        <p>...content after scripts...</p>
+    </body>
+</html>
